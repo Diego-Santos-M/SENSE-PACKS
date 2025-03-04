@@ -30,8 +30,15 @@ if [ "$Respuesta" = "si" ]; then
     	echo "Eliminando carpetas carpetas..."
 	for usuario in /home/*; do
         	rm -rf "$usuario/$NOMBRE_CARPETA"
+                ALIAS_CMD="alias uninstall-sense='$usuario/SENSE/Program_Files/uninstall.sh'"
+
+                if grep -Fxq "$ALIAS_CMD" /etc/bash.bashrc; then
+                        sed -i "\|$ALIAS_CMD|d" /etc/bash.bashrc
+                        echo "Alias eliminado de /etc/bash.bashrc"
+                fi
 	done
         echo "Las carpetas han sido eliminadas"
+
 elif [ "$Respuesta" = "no" ]; then
     	echo "Desinstalación cancelada."
 fi
