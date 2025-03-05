@@ -31,11 +31,28 @@ if [ "$Respuesta" = "si" ]; then
 	for usuario in /home/*; do
         	rm -rf "$usuario/$NOMBRE_CARPETA"
                 ALIAS_CMD="alias uninstall-sense='sudo bash $usuario/SENSE/Program_Files/uninstall.sh'"
+		ALIAS_CMD_SENSE="alias SENSE='bash $usuario/SENSE/Program_Files/comandossc.sh'"
 
                 if grep -Fxq "$ALIAS_CMD" /etc/bash.bashrc; then
                         sed -i "\|$ALIAS_CMD|d" /etc/bash.bashrc
                         echo "Alias eliminado de /etc/bash.bashrc"
                 fi
+		if grep -Fxq "$ALIAS_CMD_SENSE" /etc/bash.bashrc; then
+        		sed -i "\|$ALIAS_CMD_SENSE|d" /etc/bash.bashrc
+        		echo "Alias SENSE eliminado de /etc/bash.bashrc para el usuario $usuario"
+    		fi
+		ALIAS_CMD_UNINSTALL_ROOT="alias uninstall-sense='sudo bash /home/root/SENSE/Program_Files/uninstall.sh'"
+    		ALIAS_CMD_SENSE_ROOT="alias SENSE='bash /home/root/SENSE/Program_Files/comandossc.sh'"
+    		# Comprobar si el alias existe para root y eliminarlo
+    		if grep -Fxq "$ALIAS_CMD_UNINSTALL_ROOT" /etc/bash.bashrc; then
+        		sed -i "\|$ALIAS_CMD_UNINSTALL_ROOT|d" /etc/bash.bashrc
+        		echo "Alias uninstall-sense eliminado de /etc/bash.bashrc para root"
+    		fi
+
+    		if grep -Fxq "$ALIAS_CMD_SENSE_ROOT" /etc/bash.bashrc; then
+        		sed -i "\|$ALIAS_CMD_SENSE_ROOT|d" /etc/bash.bashrc
+        		echo "Alias SENSE eliminado de /etc/bash.bashrc para root"
+    		fi
 	done
         echo "Las carpetas han sido eliminadas"
 
