@@ -1,7 +1,6 @@
 
 #!/bin/bash
 
-# Cambiar el prompt temporalmente
 export PS1="Sense@$(whoami)> "
 HISTFILE="/home/$(whoami)/SENSE/Program_Files/SHELL_HISTORY"
 HISTSIZE=1000
@@ -11,92 +10,100 @@ if [ ! -d "/home/$(whoami)/SENSE/Program_Files" ]; then
     	mkdir -p "/home/$(whoami)/SENSE/Program_Files"
 fi
 
-# Verificar si el archivo de historial existe, si no, crearlo
 if [ ! -f "$HISTFILE" ]; then
     	touch "$HISTFILE"
 fi
 
-# Cargar el historial si existe
 history -r "$HISTFILE"
-echo "Bienvenido a SENSE"
-trap 'echo " Proceso interrumpido"; continue' SIGINT
+echo "Welcome to SENSE"
+trap 'echo " Process interrupted"; continue' SIGINT
 
 space() {
-    	echo "Espacio en disco disponible:"
+    	echo "Available disk space:"
     	df -h
 }
 memory() {
-    	echo "Uso de la memoria:"
+    	echo "Use of memory:"
     	free -h
 }
 services() {
-    	echo "Estado de los servicios:"
+    	echo "Services in progress:"
     	systemctl --type=service --state=running
 }
 cpu() {
-    	echo "Uso de la CPU:"
+    	echo "CPU usage:"
     	top -n 1 | grep "Cpu(s)"
 }
 find-file() {
-    	echo "Introduce el nombre del archivo a buscar:"
+    	echo "Enter the name of the file to search for:"
     	read archivo
     	find / -name "$archivo" 2>/dev/null
 	if [ -z "$resultados" ]; then
-        	echo "Error: No se encontró el archivo '$archivo'."
+        	echo "Error: File not found  '$archivo'."
     	else
-        	echo "Archivo(s) encontrado(s):"
+        	echo "File(s) found:"
         	echo "$resultados"
     	fi
 }
 processes() {
-    	echo "Procesos en ejecución del usuario $(whoami) con su PID:"
-    	ps aux --sort=%mem | grep "$(whoami)" | awk '{print $1, $2, $11}'  # Filtra por el usuario actual
+    	echo "Running processes of the user $(whoami) with their PID:"
+    	ps aux --sort=%mem | grep "$(whoami)" | awk '{print $1, $2, $11}'
 }
 order-66() {
-    	pid=$1  # Se pasa el PID como argumento de la función
+    	pid=$1
     	if [ -z "$pid" ]; then
-        	echo "Error: No se ha proporcionado un PID."
+        	echo "Error: PID not provided."
         	return 1
     	fi
-    	if kill -0 $pid 2>/dev/null; then  # Verifica si el proceso existe
+    	if kill -0 $pid 2>/dev/null; then
         	kill $pid
-        	echo "Proceso $pid eliminado."
+        	echo "Process $pid eliminated."
     	else
-        	echo "Error: El PID $pid no existe o no se puede eliminar."
+        	echo "Error: The PID $pid does not exist."
     	fi
 }
 system-run() {
-    	echo "El sistema ha estado en funcionamiento durante:"
+    	echo "The system has been in operation during:"
     	uptime -p
 }
 active-connections() {
-    	echo "Conexiones de red activas:"
-    	netstat -tuln  # Muestra todas las conexiones de red activas
+    	echo "Active network connections:"
+    	netstat -tuln
 }
 processes-memory() {
-    	echo "Procesos más intensivos en memoria:"
-    	ps aux --sort=-%mem | head -n 10  # Muestra los 10 procesos que más memoria consumen
+    	echo "Processes with higher memory usage::"
+    	ps aux --sort=-%mem | head -n 10
 }
 processes-cpu() {
-    	echo "Procesos más intensivos en CPU:"
-    	ps aux --sort=-%cpu | head -n 10  # Muestra los 10 procesos que más CPU consumen
+    	echo "Processes with higher CPU usage::"
+    	ps aux --sort=-%cpu | head -n 10
 }
 help-sense() {
-    	# Obtener el nombre del usuario actual
     	user=$(whoami)
-
-    	# Verificar si el archivo index.html existe
-    	if [ -f "/home/$user/SENSE/index.html" ]; then
-        	# Abrir el archivo en el navegador predeterminado
-        	lynx "/home/$user/SENSE/index.html"
-        	echo "Abriendo el archivo index.html..."
-    	else
-        	echo "Error: El archivo /home/$user/SENSE/index.html no se encuentra."
-    	fi
+        lynx "/home/$user/SENSE/index.html"
 }
-# Bucle para ejecutar comandos
+bye() {
+	sudo shutdown -h now
+}
+miguel() {
+	echo "                                                        "
+	echo "███    ███  █████╗ ████████╗ █████╗ ███╗   ███╗███████╗ "
+	echo "████  ████ ██╔══██╗╚══██╔══╝██╔══██╗████╗ ████║██╔════╝ "
+	echo "██╔████╔██║███████║   ██║   ███████║██╔████╔██║█████╗   "
+	echo "██║╚██╔╝██║██╔══██║   ██║   ██╔══██║██║╚██╔╝██║██╔══╝   "
+	echo "██║ ╚═╝ ██║██║  ██║   ██║   ██║  ██║██║ ╚═╝ ██║███████╗ "
+	echo "╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝ "
+	echo "════════════════════════════════════════════════════════"
+	echo "    ██████╗ █████╗ ███╗   ███╗██╗ ██████╗ ███╗   ██╗   "
+	echo "   ██╔════╝██╔══██╗████╗ ████║██║██╔═══██╗████╗  ██║   "
+	echo "   ██║     ███████║██╔████╔██║██║██║   ██║██╔██╗ ██║   "
+	echo "   ██║     ██╔══██║██║╚██╔╝██║██║██║   ██║██║╚██╗██║   "
+	echo "   ╚██████╗██║  ██║██║ ╚═╝ ██║██║╚██████╔╝██║ ╚████║   "
+	echo "    ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝   "
+	echo "═══════════════════════════════════════════════════════"
+}
+
 while true; do
-    	# Leer entrada del usuario
     	read -e -p "$PS1" cmd
     	case "$cmd" in
         "space") space ;;
@@ -113,9 +120,10 @@ while true; do
 	"processes-memory") processes-memory ;;
 	"processes-cpu") processes-cpu ;;
 	"help-sense") help-sense ;;
+	"bye") bye;;
+	"miguel") miguel ;;
         "exit") break ;;
         *)
-            # Guardar comando en el historial y ejecutar cualquier otro comando
             echo "$cmd" >> "$HISTFILE"
             history -s "$cmd"
             eval "$cmd"
@@ -123,5 +131,4 @@ while true; do
     esac
 done
 
-# Restaurar el prompt original
 export PS1="\u@\h:\w$ "
