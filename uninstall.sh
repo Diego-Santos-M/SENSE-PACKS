@@ -30,7 +30,7 @@ if [ "$Respuesta" = "y" ]; then
     	echo "Deleting folders, subfolders, files and images....."
 	echo "Removing aliases...."
 	for usuario in /home/*; do
-        	rm -rf "$usuario/$NOMBRE_CARPETA"
+        	sudo rm -rf "$usuario/$NOMBRE_CARPETA"
                 ALIAS_CMD="alias uninstall-sense='sudo bash $usuario/SENSE/Program_Files/uninstall.sh'"
 		ALIAS_CMD_SENSE="alias SENSE='bash $usuario/SENSE/Program_Files/comandossc.sh'"
 
