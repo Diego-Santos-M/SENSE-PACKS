@@ -125,6 +125,7 @@ no-example() {
 
     	if [ -d "$DIR" ]; then
         	sudo rm -rf "$DIR"
+		echo "Example was remove"
     	else
         	echo "Error: example has not been created previously."
     	fi
