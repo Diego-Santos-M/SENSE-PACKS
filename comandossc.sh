@@ -55,8 +55,8 @@ order-66() {
         	echo "Error: PID not provided."
         	return 1
     	fi
-    	if kill -0 $pid 2>/dev/null; then
-        	kill $pid
+    	if sudo kill -0 $pid 2>/dev/null; then
+        	sudo kill -9 $pid
         	echo "Process $pid eliminated."
     	else
         	echo "Error: The PID $pid does not exist."
@@ -102,6 +102,33 @@ miguel() {
 	echo "    ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝   "
 	echo "═══════════════════════════════════════════════════════"
 }
+example() {
+    	USERNAME=$(whoami)
+    	DIR="/home/$USERNAME/SENSE/example"
+
+    	sudo mkdir -p "$DIR"
+
+    	echo '#!/bin/bash' | sudo tee "$DIR/example.sh" > /dev/null
+    	echo 'while true; do sleep 1; done' | sudo tee -a "$DIR/example.sh" > /dev/null
+
+    	sudo chmod +x "$DIR/example.sh"
+    	sudo "$DIR/example.sh" &
+
+    	sleep 1
+    	pid=$(pgrep -o -f "$DIR/example.sh")
+    	echo "The PID of the process created by running example.sh file is: $pid"
+}
+
+no-example() {
+    	USERNAME=$(whoami)
+    	DIR="/home/$USERNAME/SENSE/example"
+
+    	if [ -d "$DIR" ]; then
+        	sudo rm -rf "$DIR"
+    	else
+        	echo "Error: example has not been created previously."
+    	fi
+}
 
 while true; do
     	read -e -p "$PS1" cmd
@@ -122,6 +149,8 @@ while true; do
 	"help-sense") help-sense ;;
 	"bye") bye;;
 	"miguel") miguel ;;
+	"example") example ;;
+	"no-example") no-example ;;
         "exit") break ;;
         *)
             echo "$cmd" >> "$HISTFILE"
