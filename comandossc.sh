@@ -131,6 +131,42 @@ no-example() {
     	fi
 }
 
+if [[ $# -gt 0 ]]; then
+    	cmd="$1"
+    	shift
+
+    	case "$cmd" in
+        	"space") space ;;
+        	"memory") memory ;;
+        	"services") services ;;
+        	"cpu") cpu ;;
+        	"find-file") find-file ;;
+        	"processess") processess ;;
+        	"order-66")
+            	if [[ -n "$1" ]]; then
+                	order-66 "$1"
+            	else
+                	echo "Error: Se requiere un PID para 'order-66'"
+            	fi
+            	;;
+        	"system-run") system-run ;;
+        	"active-connections") active-connections ;;
+        	"processes-memory") processes-memory ;;
+        	"processes-cpu") processes-cpu ;;
+        	"help-sense") help-sense ;;
+        	"bye") bye ;;
+        	"miguel") miguel ;;
+        	"example") example ;;
+        	"no-example") no-example ;;
+        	"exit") exit 0 ;;
+        	*)
+            	echo "$cmd $*" >> "$HISTFILE"
+            	history -s "$cmd $*"
+            	eval "$cmd $*"
+            	;;
+    	esac
+fi
+
 while true; do
     	read -e -p "$PS1" cmd
     	case "$cmd" in
